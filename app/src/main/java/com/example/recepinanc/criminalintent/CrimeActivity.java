@@ -1,6 +1,7 @@
 package com.example.recepinanc.criminalintent;
 
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.annotation.NonNull;
@@ -22,8 +23,15 @@ public class CrimeActivity extends FragmentActivity {
         setContentView(R.layout.activity_crime);
 
 
-        FragmentManager manager = getSupportFragmentManager();
-        Fragment 
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+
+        if (fragment == null) { //prevent the conflict of fragments in case of Rotation etc.
+            fragment = new CrimeFragment();
+            fm.beginTransaction()
+                    .add(R.id.fragmentContainer, fragment)
+                    .commit();
+        }
 
     }
 }
