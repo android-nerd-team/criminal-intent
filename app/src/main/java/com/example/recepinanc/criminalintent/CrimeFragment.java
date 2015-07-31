@@ -1,7 +1,8 @@
 package com.example.recepinanc.criminalintent;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+
 
 /**
  * Created by Recepinanc on 30.07.2015.
