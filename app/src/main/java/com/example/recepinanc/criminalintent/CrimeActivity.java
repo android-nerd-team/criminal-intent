@@ -3,35 +3,17 @@ package com.example.recepinanc.criminalintent;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
 
 
-public class CrimeActivity extends FragmentActivity {
+public class CrimeActivity extends SingleFragmentActivity {     //Extending this single fragment activity class saved us from a lot typing
+                                                                //and since it used this createFragment method in its(SingleFragmentActivity's) own implementation
+                                                                //we are able to change which fragment will be created by our BlahBlahActivity.java file by allowing us to implement this createFragment()
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crime);
-
-
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
-
-        if (fragment == null) { //prevent the conflict of fragments in case of Rotation etc.
-            fragment = new CrimeFragment();
-            fm.beginTransaction()
-                    .add(R.id.fragmentContainer, fragment)
-                    .commit();
-        }
-
+    protected Fragment createFragment() {
+        return new CrimeFragment();
     }
+
 }
