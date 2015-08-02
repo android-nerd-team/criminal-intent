@@ -12,11 +12,15 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.UUID;
+
 
 /**
  * Created by Recepinanc on 30.07.2015.
  */
 public class CrimeFragment extends Fragment {
+
+    public static final String EXTRA_CRIME_ID = "com.bignerdranch.android.criminalintent.crime_id";
 
     private Crime mCrime;
     private EditText mTitleField;
@@ -27,7 +31,21 @@ public class CrimeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCrime = new Crime();
+
+        UUID crimeId = (UUID)getArguments().getSerializable(EXTRA_CRIME_ID);
+
+        mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
+    }
+
+    public static CrimeFragment newInstance(UUID crimeId){
+
+        Bundle args = new Bundle();
+        args.putSerializable(EXTRA_CRIME_ID, crimeId);
+
+        CrimeFragment fragment = new CrimeFragment();
+        fragment.setArguments(args);
+
+        return fragment;
     }
 
     @Override
@@ -36,23 +54,7 @@ public class CrimeFragment extends Fragment {
 
 
         mTitleField = (EditText)v.findViewById(R.id.crime_title);
-        mDateButton = (Button)v.findViewById(R.id.crime_date);
-        mDateButton.setText(mCrime.getDate().toString());
-        mDateButton.setEnabled(false);
-        mSolvedCheckBox = (CheckBox)v.findViewById(R.id.crime_solved);
-        mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mCrime.setSolved(isChecked);
-                if(isChecked)
-                    buttonView.setText(R.string.crime_solved_label_isChecked);
-                else
-                    buttonView.setText(R.string.crime_solved_label);
-            }
-        });
-
-
+        mTitleField.setText(mCrime.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -70,6 +72,22 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        mDateButton = (Button)v.findViewById(R.id.crime_date);
+        mDateButton.setText(mCrime.getDate().toString());
+        mDateButton.setEnabled(false);
+        mSolvedCheckBox = (CheckBox)v.findViewById(R.id.crime_solved);
+        mSolvedCheckBox.setChecked(mCrime.isSolved());
+        mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mCrime.setSolved(isChecked);
+                if (isChecked)
+                    buttonView.setText(R.string.crime_solved_label_isChecked);
+                else
+                    buttonView.setText(R.string.crime_solved_label);
+            }
+        });
 
         return v;
     }
